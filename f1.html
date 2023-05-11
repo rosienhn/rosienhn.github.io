@@ -1,0 +1,361 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>My portfolio!</title>
+		<hr class="major" />
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets1/css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+
+							<!-- Header -->
+								<header id="header">
+									<a href="index.html" class="logo"><strong>Welcome to my portfolio!</strong></a>
+									<ul class="icons">
+										<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+										<li><a href="https://www.linkedin.com/in/nhung-nguyen-hong/" class="icon brands fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+										<li><a href="https://github.com/rosienhn" class="icon brands fa-github"><span class="label">Github</span></a></li>
+										<li><a href="mailTo:nguyenhongnhunghr@gmail.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+									</ul>
+								</header>
+
+							
+							
+								<!-- Content -->
+								<section>
+									<header class="main">
+										<h1>Building Cloud Data platform for Formula 1 data</h1>
+										<h5>11 May, 2023</h5>
+										<h3>Azure Data Factory | Databricks | Delta Lake | Azure ADLS Gen2</h3>
+									</header>
+									<span class="image main"><img src="" alt="" /></span>
+									
+									<h2 id="content">Project Overview</h2>
+													
+									<div>
+									  <p>This project aims to build a data pipeline which is scheduled and triggered by Azure Data Factory pipelines for historical and up-to-date Formula1 data.	
+										Databricks and Delta Lake were used to implement a solution using Lakehouse architecture.</p>
+										 
+										<p>Detail codes can be found in my Github repository <a href="https://github.com/rosienhn/Formula1_DataPlatform_DataEngineer">here</a>.</p>
+										
+										  
+									  <p>To access Formula One data, the Ergast API was used to retrieve data for all races dating back to 1950. The API offers data in XML or JSON formats, and CSV-formatted database tables can also be downloaded. Although the entire dataset can be obtained at once, I opted to process it incrementally to better understand real-world scenarios.</p>
+									  <p>Formula One races usually take place on Sundays, but not every Sunday is reserved for a race. Races are typically scheduled for only 20 to 24 weeks per year, with no races scheduled during the remaining weeks. To implement incremental loading, I downloaded a zip file from the Ergast API and extracted its contents into CSV format. Each CSV file contained a single database table, which I split into smaller segments based on race IDs using Python.</p>
+									  <p>For this project, I assumed that the first data containing data for all races up to race 1096 on the cutover date of December 24, 2022, will be received on that day, which is a Sunday. Data for the next two races, raceIDs 1098-1099, will be received on March 19, 2023 (data for race 1097 is not available on the Ergast API). On April 2, 2023, data for the latest race, race ID 1100, which is the "Australian Grand Prix" held on that day, will be received. After that, data will be updated every Sunday.</p>
+									  
+
+											<table>
+												<p>Files and data used in the project are listed below:</p>
+												<tr>
+												  <th>File Name</th>
+												  <th>Description</th>
+												</tr>
+												<tr>
+												  <td>Circuits.csv, Drivers.csv, Constructors.csv, Races.csv</td>
+												  <td>These files contain all the information related to the circuits, the drivers, the teams and the races. It was assumed that the information remains consistent throughout the race years.</td>
+												</tr>
+												<tr>
+												  <td>Lap_times.csv, Pitstops.csv, Results.csv</td>
+												  <td>The CSV files has been divided into three smaller files using Python. The first two contain race information from race_id 1 to 1096 and from 1098 to 1099, respectively. The third file includes information solely on the 1100th race.</td>
+												</tr>
+												<tr>
+													<td>Qualifying.csv</td>
+													<td>The CSV file was converted into three smaller json files using Python. The first two contain race information from race_id 1 to 1096 and from 1098 to 1099, respectively. The third file includes information solely on the 1100th race.</td>
+												  </tr>
+											  </table>
+									 
+									  <p>The Python script to split the files can be found <a href="https://github.com/rosienhn/Formula1_DataPlatform_DataEngineer/tree/main/Databricks%20Notebooks">here</a>.</p>
+
+									  
+									  <p>After the splitting process, the updated dataset was uploaded to DataLake Azure ADLS Gen2 and organized into three separate folders: 2022-12-24, 2023-03-19, and 2023-04-02.</p>
+										
+									  <p>It's recommended to review the Ergast Developer API website, which provides extensive information about the various tables and their relationships. The ERD diagram and Ergast Database User Guide can also be helpful resources.</p>
+									 
+									  <ul class="actions">
+										<li><a href="http://ergast.com/images/ergast_db.png" class="button">Ergast Developer API</a></li>
+									  </ul>
+
+									  <p>This project takes its inspiration from 2 Udemy courses: https://www.udemy.com/course/learn-azure-data-factory-from-scratch/ and https://www.udemy.com/course/azure-databricks-spark-core-for-data-engineers/.</p>
+									</div>
+									
+									
+																		
+
+									<!-- <hr class="major" />
+										<!DOCTYPE html>
+											<html>
+											<head>
+												<title>Formula 1 Overview</title>
+												<style>
+													.text-container {
+														display: block;
+													}
+												</style>
+												<script>
+													function toggleContent() {
+														var contentDiv = document.querySelector('.text-container');
+														if (contentDiv.style.display === 'none') {
+															contentDiv.style.display = 'block';
+														} else {
+															contentDiv.style.display = 'none';
+														}
+													}
+												</script>
+											</head>
+											<body>
+												
+												<header>
+													<h2>Formula 1 Overview</h2>
+												</header>
+
+												<div class="text-container">
+													
+													<p>In Formula One, a race typically happens over a weekend and consists of roughly 50 to 70 laps, depending on the length of the circuit. There are roughly 20 races held per season, with each race taking place at a different circuit around the world. The races are conducted on a variety of circuits, including traditional race tracks, street circuits, and hybrid courses. Each race takes place over a weekend, with around ten teams participating, also known as constructors. Each team has two drivers, each assigned to a specific car, with reserve drivers available for races. Pit stops are made during the race to change tires or replace damaged cars. Driver and constructor standings are determined based on race results, with the top drivers and teams becoming champions at the end of the season.</p>
+
+													<p>On Friday, there are two practice sessions for the drivers, and on Saturday morning, there is a final practice session. These practice sessions do not count towards any points or achievements, but they give the drivers an opportunity to familiarize themselves with the circuit and their cars.</p>
+
+													<p>On Saturday afternoon, there is a qualifying session, which takes place over three different stages, known as Q1, Q2, and Q3. The qualifying results determine the grid position of the driver for the race. The higher a driver qualifies, the further forward they get to start the race, which is a significant advantage.</p>
+
+													<p>During the race, drivers make pit stops to change tires or to replace damaged parts of the car. At the end of the race, the results are used to calculate the points earned by each driver and each team. The driver with the most points at the end of the season is crowned the Drivers' Champion, and the team with the most points is the Constructors' Champion.</p>
+												</div>
+
+												<button onclick="toggleContent()">Show/Hide information</button>
+											</body>
+											</html>-->
+																	
+														
+																			
+									<hr class="major" />
+
+									<h2>Project Requirements</h2>
+
+									<div class="scrollable-content">
+										<div class="content">
+											<ul>
+												<ol>
+													<li><b>Data Ingestion Requirements</b></li>
+													<p>The task is to load historical F1 data into data lake Azure ADLS Gen2 in various formats and apply the appropriate schema to the data. The ingested data must have audit columns such as the ingested date and the source, and must be stored in Delta columnar format. The ingested data must be made available for various workloads, including machine learning, further transformation, BI reporting and analytical workloads via SQL. Additionally, the ingestion logic must be designed to handle incremental data loads.</p>
+												
+													<li><b>Data Transformation Requirements</b></li>
+													<p>The requirements include combining required data items into transformed table for reporting/analysis purposes, adding audit columns to the transformed tables, and storing the transformed data in Delta format. The transformed data must be made available for various workloads, such as machine learning, BI reporting, and SQL analytics. Finally, the transformation logic must be designed to handle incremental loads.</p>
+																							
+													<li><b>Data Analytical Requirements</b></li>
+													<p>The tasks include determining the most dominant drivers and teams over the last decade and all-time in Formula1, ranking them by dominance</p>
+																																		
+													<li><b>Data BI Reports Requirements</b></li>
+														<ul>
+															<li>Produce driver and constructor standings for current and past years.</li>
+															<li>There is a predetermined set of data elements that should be used for the BI reporting. These data items could include specific metrics, dimensions, or other relevant information that is necessary for the analysis. The list of data items could be based on the organization's needs and requirements, industry standards, or other factors. By using a defined list of data items, the BI reporting can be standardized and consistent across different reports and analyses.</li>
+														</ul>
+																							
+													<li><b>Scheduling Requirements</b></li>
+														<ul>
+															<li>Schedule pipelines to run at 11.30 p.m. every Sunday.</li>
+															<li>Monitor pipeline status and re-run failed pipelines and set up alerts on failures.</li>
+															<li>Set up alerts for pipeline failures.</li>
+															<li>Enable time travel and ability to query data based on time.</li>
+															<li>Roll back data to previous versions in case of issues.</li>
+														</ul>
+												</ol>
+											</ul>
+										</div>
+									</div>
+											
+										
+									<hr class="major" />
+									<h2>Solution Architecture</h2>
+										<ul>
+											<li>The architecture includes three layers: the raw layer(Bronze layer), the processed layer(Silver layer), and the presentation layer(or Gold layer).</li>
+											<li>Data will be uploaded to raw layer in csv/json format and ingested using Databricks Notebooks before being stored in the processed layer in delta format.</li>
+											<li>The processed layer will include schema and partition information as well as additional audit information.</li>
+											<li>Transformed data will be stored in the presentation layer in Delta format.</li>
+											<li>Azure Data Factory will be used for orchestration, scheduling and monitoring the pipelines.</li>
+																					  
+										</ul>
+										<p>The below image represents the solution architechture for this project:</p>
+										<div class="image">
+											<img src="image2/Solutionupdate.png" alt="" />
+										</div>
+										<p>The pipeline architecture is based on industry research and best practices, with reference to similar architecture from Microsoft and Databricks.</p>
+										
+										<ul class="actions">
+											<li><a href="https://learn.microsoft.com/en-us/azure/architecture/solution-ideas/articles/azure-databricks-modern-analytics-architecture" class="button big">To solution idea</a></li>
+										</ul>
+									
+									<hr class="major" />
+
+									<h2>Environment setup</h2>
+									<ol type='i'>
+										<li>Azure subcription
+										<li>Azure Data Lake Storage Gen2
+										<li>Azure Data Factory
+										<li>Azure SQL Database
+										<li>Azure Key Vault
+										<li>Azure Databricks 
+											<ul>
+												<li> Create, configure and monitor Databricks clusters
+												<li> Configure Databricks to use the ABFS driver to read and write data stored on Azure Data Lake Storage Gen2 using secrets stored in Azure Key Vault. A Pyspark function was used to mount the AZure ADLS Gen 2 to Databricks.
+													<!-- Preformatted Code -->
+													<h3></h3>
+													<pre><code>def mount_adls(storage_account_name, container_name):
+													
+# Get secrets from Key Vault
+client_id = dbutils.secrets.get(scope = 'formula1-scope', key = 'formula1-app-clientid')
+tenant_id = dbutils.secrets.get(scope = 'formula1-scope', key = 'formula1-app-tenantid')
+client_secret = dbutils.secrets.get(scope = 'formula1-scope', key = 'formula1-app-client-secret')
+														
+# Set spark configurations
+configs = {"fs.azure.account.auth.type": "OAuth",
+"fs.azure.account.oauth.provider.type": "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider",
+"fs.azure.account.oauth2.client.id": client_id,
+"fs.azure.account.oauth2.client.secret": client_secret,
+"fs.azure.account.oauth2.client.endpoint": f"https://login.microsoftonline.com/{tenant_id}/oauth2/token"}
+														
+# Unmount the mount point if it already exists
+if any(mount.mountPoint == f"/mnt/{storage_account_name}/{container_name}" for mount in dbutils.fs.mounts()):
+dbutils.fs.unmount(f"/mnt/{storage_account_name}/{container_name}")
+														
+# Mount the storage account container
+dbutils.fs.mount(
+source = f"abfss://{container_name}@{storage_account_name}.dfs.core.windows.net/",
+mount_point = f"/mnt/{storage_account_name}/{container_name}",
+extra_configs = configs)
+														
+display(dbutils.fs.mounts())
+</code></pre>
+												<li> Use Delta Lake to implement a solution using Lakehouse architecture
+											</ul>
+										
+										</ol>
+									<ul> <p><b>Languages</b></p>
+										<li>Spark SQL
+										<li>PySpark</ul>
+									<ul> <p><b>Technologies</b></p>
+										<li>Data Pipeline
+										<li>Spark (Spark streaming and Spark Machine Learning were not covered in this project)</ul>
+								
+								<hr class="major" />
+									<h2>Data Pipelines</h2>
+									<div class="image">
+										<p>I designed a master pipeline that consists of two sub-pipelines, each of which is responsible for a specific set of tasks. This architecture is well-suited for building a data processing pipeline that can handle large volumes of data and produce reliable, high-quality output. By breaking the pipeline down into smaller, more manageable tasks, I can ensure that each component is easier to build, test, and debug, which can help to improve overall pipeline efficiency and reliability.</p>
+										<img src="image2/masterpipeline.png" alt="" />
+										<p>The first sub-pipeline is responsible for ingesting data into the pipeline, while the second sub-pipeline is responsible for transforming that data into a format suitable for analysis and storage.</p>
+										<img src="image2/Ingestion pipeline.png" alt="" />
+										<p>Once the data has been transformed, data is stored in both Azure ADLS Gen2 in Delta format and Azure SQL database, making it available for use by downstream applications such as Power BI/BI Report for reporting and Machine Learning models.</p>
+										<img src="image2/Transformation pipeline.png" alt="" />
+										
+									</div>
+									</section>
+
+								</section>
+								<hr class="major" />
+									<h2>Databricks Notebook Activities</h2>
+									
+									<p>All Databricks Notebooks can be found <a href="https://github.com/rosienhn/Formula1_DataPlatform_DataEngineer/tree/main/Databricks%20Notebooks">here</a>.</p>
+									<div class="image">
+										
+										
+									</div>
+									</section>
+
+						</div>
+					</div>
+
+				<!-- Sidebar -->
+					<div id="sidebar">
+						<div class="inner">
+
+							<!-- Search -->
+								<section id="search" class="alt">
+									<form method="post" action="#">
+										<input type="text" name="query" id="query" placeholder="Search" />
+									</form>
+								</section>
+
+							<!-- Menu -->
+								<nav id="menu">
+									<header class="major">
+										<h2>Menu</h2>
+									</header>
+									<ul>
+										<li><a href="index.html">Homepage</a></li>
+										<li><a href="my projects.html">My projects</a></li>
+										<li><a href="#">My Resume</a></li>
+										
+									</ul>
+								</nav>
+
+							<!-- Items -->
+					<section class="wrapper style1 align-center">
+						<div class="inner">
+							<h3>Diploma & Certificates</h3>
+							<!--<p>This is an <strong>Items</strong> element, and it's basically just a grid for organizing items of various types. You can customize its <span class="demo-controls">appearance with a number of modifiers</span>, as well as assign it an optional <code>onload</code> or <code>onscroll</code> transition modifier (<a href="#reference-items">details</a>).</p>-->
+							<div class="items style1 medium onscroll-fade-in">
+								<section>
+									<span class="icon style2 major fa-gem"></span>
+									<h3>Microsoft Azure Data Engineer</h3>
+									<p>DP-203 certification-to be obtained</p>
+								</section>
+								<section>
+									<span class="icon solid style2 major fa-save"></span>
+									<h3>Certified Microsoft Azure Data Analyst</h3>
+									<p>PL-300 certification</p>
+								</section>
+								<section>
+									<span class="icon solid style2 major fa-chart-bar"></span>
+									<h3>Microsoft Azure Data Fundamental</h3>
+									<p>AZ-900 Certification</p>
+								</section>
+								<section>
+									<span class="icon style2 major fa-paper-plane"></span>
+									<h3>Msc Human Resource Studies</h3>
+									<p>Tilburg Univercity</p>
+								</section>
+							</div>
+
+						<!-- Section -->
+							<section>
+								<header class="major">
+									<h2>Get in touch</h2>
+								</header>
+								<p>Like what you see?
+
+									I'd love to hear from you!</p>
+								<ul class="contact">
+									<li class="icon solid fa-envelope"><a href="#">nguyenhongnhunghr@gmail.com</a></li>
+									<li class="icon solid fa-phone"> 0628501248</li>
+								</ul>
+							</section>
+
+							<!-- Footer -->
+								<footer id="footer">
+									<p class="copyright">&copy; Copyright 2023. All rights reserved<a href="#"></a><a href="#"></a>.</p>
+								</footer>
+
+						</div>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets1/js/jquery.min.js"></script>
+			<script src="assets1/js/browser.min.js"></script>
+			<script src="assets1/js/breakpoints.min.js"></script>
+			<script src="assets1/js/util.js"></script>
+			<script src="assets1/js/main.js"></script>
+
+	</body>
+</html>
