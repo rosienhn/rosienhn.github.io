@@ -39,106 +39,22 @@
 									<header class="main">
 										<h1>Building Cloud Data platform for Formula 1 data</h1>
 										<h5>11 May, 2023</h5>
-										<h3>Azure Data Factory | Databricks | Delta Lake | Azure ADLS Gen2</h3>
+										<h3>Azure Data Factory | Databricks | Delta Lake | Azure ADLS Gen2 | Azure Key Vault</h3>
 									</header>
 									<span class="image main"><img src="" alt="" /></span>
 									
 									<h2 id="content">Project Overview</h2>
 													
 									<div>
-									  <p>This project aims to build a data pipeline which is scheduled and triggered by Azure Data Factory pipelines for historical and up-to-date Formula1 data.	
+									  <p>This project aims to build a data pipeline which is scheduled and triggered by Azure Data Factory for historical and up-to-date Formula1 data.	
 										Databricks and Delta Lake were used to implement a solution using Lakehouse architecture.</p>
-										<br>1. The initial data was obtained from the Ergast API, and subsequently tailored to suit the requirements of the project. Following this, the data was stored in DataLake Azure ADLS Gen2, where it was arranged according to the relevant event dates. The transformed data was then saved in both Delta Lake and Azure SQL Database.
-										<br>2. Using databricks, data must be ingested into a Delta lake in delta formats, transformed into tables for reporting and analysis, and made available for machine learning/reporting and copy to Azure SQL database. 
-										<br>3. Data pipelines must be scheduled, monitored, and alerts set up for pipeline failures.
-										<br>
-										<p>Detail codes can be found in my Github repository <a href="https://github.com/rosienhn/Formula1_DataPlatform_DataEngineer">here</a>.</p>
-										
-										  
-									  <p>To access Formula One data, the Ergast API was used to retrieve data for all races dating back to 1950. The API offers data in XML or JSON formats, and CSV-formatted database tables can also be downloaded. Although the entire dataset can be obtained at once, I opted to process it incrementally to better understand real-world scenarios.</p>
-									  <p>Formula One races usually take place on Sundays, but not every Sunday is reserved for a race. Races are typically scheduled for only 20 to 24 weeks per year, with no races scheduled during the remaining weeks. To implement incremental loading, I downloaded a zip file from the Ergast API and extracted its contents into CSV format. Each CSV file contained a single database table, which I split into smaller segments based on race IDs using Python.</p>
-									  <p>For this project, I assumed that the first data containing data for all races up to race 1096 on the cutover date of December 24, 2022, will be received on that day, which is a Sunday. Data for the next two races, raceIDs 1098-1099, will be received on March 19, 2023 (data for race 1097 is not available on the Ergast API). On April 2, 2023, data for the latest race, race ID 1100, which is the "Australian Grand Prix" held on that day, will be received. After that, data will be updated every Sunday.</p>
-									  
-
-											<table>
-												<p>Files and data used in the project are listed below:</p>
-												<tr>
-												  <th>File Name</th>
-												  <th>Description</th>
-												</tr>
-												<tr>
-												  <td>Circuits.csv, Drivers.csv, Constructors.csv, Races.csv</td>
-												  <td>These files contain all the information related to the circuits, the drivers, the teams and the races. It was assumed that the information remains consistent throughout the race years.</td>
-												</tr>
-												<tr>
-												  <td>Lap_times.csv, Pitstops.csv, Results.csv</td>
-												  <td>The CSV files has been divided into three smaller files using Python. The first two contain race information from race_id 1 to 1096 and from 1098 to 1099, respectively. The third file includes information solely on the 1100th race.</td>
-												</tr>
-												<tr>
-													<td>Qualifying.csv</td>
-													<td>The CSV file was converted into three smaller json files using Python. The first two contain race information from race_id 1 to 1096 and from 1098 to 1099, respectively. The third file includes information solely on the 1100th race.</td>
-												  </tr>
-											  </table>
-									 
-									  <p>The Python script to split the files can be found <a href="https://github.com/rosienhn/Formula1_DataPlatform_DataEngineer/tree/main/Databricks%20Notebooks">here</a>.</p>
-
-									  
-									  <p>After the splitting process, the updated dataset was uploaded to DataLake Azure ADLS Gen2 and organized into three separate folders: 2022-12-24, 2023-03-19, and 2023-04-02.</p>
-										
-									  <p>It's recommended to review the Ergast Developer API website, which provides extensive information about the various tables and their relationships. The ERD diagram and Ergast Database User Guide can also be helpful resources.</p>
-									 
-									  <ul class="actions">
-										<li><a href="http://ergast.com/images/ergast_db.png" class="button">Ergast Developer API</a></li>
-									  </ul>
-
-									  <p>This project takes its inspiration from 2 Udemy courses: https://www.udemy.com/course/learn-azure-data-factory-from-scratch/ and https://www.udemy.com/course/azure-databricks-spark-core-for-data-engineers/.</p>
-									</div>
-									
-									
-																		
-
-									<!-- <hr class="major" />
-										<!DOCTYPE html>
-											<html>
-											<head>
-												<title>Formula 1 Overview</title>
-												<style>
-													.text-container {
-														display: block;
-													}
-												</style>
-												<script>
-													function toggleContent() {
-														var contentDiv = document.querySelector('.text-container');
-														if (contentDiv.style.display === 'none') {
-															contentDiv.style.display = 'block';
-														} else {
-															contentDiv.style.display = 'none';
-														}
-													}
-												</script>
-											</head>
-											<body>
-												
-												<header>
-													<h2>Formula 1 Overview</h2>
-												</header>
-
-												<div class="text-container">
-													
-													<p>In Formula One, a race typically happens over a weekend and consists of roughly 50 to 70 laps, depending on the length of the circuit. There are roughly 20 races held per season, with each race taking place at a different circuit around the world. The races are conducted on a variety of circuits, including traditional race tracks, street circuits, and hybrid courses. Each race takes place over a weekend, with around ten teams participating, also known as constructors. Each team has two drivers, each assigned to a specific car, with reserve drivers available for races. Pit stops are made during the race to change tires or replace damaged cars. Driver and constructor standings are determined based on race results, with the top drivers and teams becoming champions at the end of the season.</p>
-
-													<p>On Friday, there are two practice sessions for the drivers, and on Saturday morning, there is a final practice session. These practice sessions do not count towards any points or achievements, but they give the drivers an opportunity to familiarize themselves with the circuit and their cars.</p>
-
-													<p>On Saturday afternoon, there is a qualifying session, which takes place over three different stages, known as Q1, Q2, and Q3. The qualifying results determine the grid position of the driver for the race. The higher a driver qualifies, the further forward they get to start the race, which is a significant advantage.</p>
-
-													<p>During the race, drivers make pit stops to change tires or to replace damaged parts of the car. At the end of the race, the results are used to calculate the points earned by each driver and each team. The driver with the most points at the end of the season is crowned the Drivers' Champion, and the team with the most points is the Constructors' Champion.</p>
-												</div>
-
-												<button onclick="toggleContent()">Show/Hide information</button>
-											</body>
-											</html>-->
-																	
+										<p>This is a good use case for Delta Lake, as it provides versioning and time travel capabilities to the data. By using Delta Lake, we can easily go back in time to see how the data looked at a specific point in time, and can also create new versions of the data as it changes over time. The approach is using PySpark in Databricks notebook to analyze the yearly race results and calculate the points for each team/driver based on their position. By doing this, we can determine the most dominant drivers/teams over specific time, which is valuable information for fans, sponsors, and teams.</p>
+										<p>1. The initial data was obtained from the Ergast API, and subsequently tailored to suit the requirements of the project. Following this, the data was stored in DataLake Azure ADLS Gen2, where it was arranged according to the relevant event dates. The transformed data was then saved in both Delta Lake and Azure SQL Database.
+											<br>2. Using databricks, data must be ingested into a Delta lake in delta formats, transformed into tables for reporting and analysis, and made available for machine learning/reporting and copy to Azure SQL database. 
+											<br>3. Data pipelines must be scheduled, monitored, and alerts set up for pipeline failures.</p>
+										<p>Detail codes can be found in my Github repository <a href="https://github.com/rosienhn/Formula1_DataPlatform_DataEngineer">here</a>. This project takes its inspiration from 2 Udemy courses: https://www.udemy.com/course/learn-azure-data-factory-from-scratch/ and https://www.udemy.com/course/azure-databricks-spark-core-for-data-engineers/.</p>
+															
+																					
 														
 																			
 									<hr class="major" />
@@ -250,8 +166,79 @@ display(dbutils.fs.mounts())
 										<li>Data Pipeline
 										<li>Spark (Spark streaming and Spark Machine Learning were not covered in this project)</ul>
 								
+								
 								<hr class="major" />
-									<h2>Data Pipelines</h2>
+									<h2>Projects in detail</h2>
+									<p>To access Formula One data, the Ergast API was used to retrieve data for all races dating back to 1950. The API offers data in XML or JSON formats. CSV-formatted database tables can also be downloaded. Although the entire dataset can be obtained at once, I opted to process it incrementally to better understand real-world scenarios.</p>
+									  <p>Formula One races usually take place on Sundays, but not every Sunday is reserved for a race. Races are typically scheduled for only 20 to 24 weeks per year, with no races scheduled during the remaining weeks. To implement incremental loading, I downloaded a zip file from the Ergast API and extracted its contents into CSV format. Each CSV file contained a single database table, which I split into smaller segments based on race IDs using Python.</p>
+									  <p>For this project, I assumed that the first data containing data for all races up to race 1096 on the cutover date of December 24, 2022, will be received on that day, which is a Sunday. Data for the next two races, raceIDs 1098-1099, will be received on March 19, 2023 (data for race 1097 is not available on the Ergast API). On April 2, 2023, data for the latest race, race ID 1100, which is the "Australian Grand Prix" held on that day, will be received. After that, data will be updated every Sunday.</p>
+									  
+											<table>
+												<p>Files and data used in the project are listed below:</p>
+												<tr>
+												  <th>File Name</th>
+												  <th>Description</th>
+												</tr>
+												<tr>
+												  <td>Circuits.csv, Drivers.csv, Constructors.csv, Races.csv</td>
+												  <td>These files contain all the information related to the circuits, the drivers, the teams and the races. It was assumed that the information remains consistent throughout the race years.</td>
+												</tr>
+												<tr>
+												  <td>Lap_times.csv, Pitstops.csv, Results.csv</td>
+												  <td>The CSV files has been divided into three smaller files using Python. The first two contain race information from race_id 1 to 1096 and from 1098 to 1099, respectively. The third file includes information solely on the 1100th race.</td>
+												</tr>
+												<tr>
+													<td>Qualifying.csv</td>
+													<td>The CSV file was converted into three smaller json files using Python. The first two contain race information from race_id 1 to 1096 and from 1098 to 1099, respectively. The third file includes information solely on the 1100th race.</td>
+												  </tr>
+											  </table>
+									 
+									  <p>The Python script to split the files can be found <a href="https://github.com/rosienhn/Formula1_DataPlatform_DataEngineer/tree/main/Databricks%20Notebooks">here</a>.</p>
+
+									  
+									  <p>After the splitting process, the updated dataset was uploaded to DataLake Azure ADLS Gen2 and organized into three separate folders: 2022-12-24, 2023-03-19, and 2023-04-02.</p>
+										
+									  <p>It's recommended to review the Ergast Developer API website, which provides extensive information about the various tables and their relationships. The ERD diagram and Ergast Database User Guide can also be helpful resources.</p>
+									 
+									  <ul class="actions">
+										<li><a href="http://ergast.com/images/ergast_db.png" class="button">Ergast Developer API</a></li>
+									  </ul>
+									  <strong><h3>STEP 1: Data Ingestion</h3></strong>
+										<p>The data is ingested using the Spark DataFrame API, with partitioning and incremental loading based on file_date parameters. Circuits.csv, Drivers.csv, Constructors.csv, and Races.csv are fully loaded, as they are assumed to be static. Lap_times.csv, Pitstops.csv, Results.csv, and Qualifying.csv are loaded incrementally as they are updated weekly. A function is used to merge the incoming data with the existing Delta Lake data using the merge_delta_data() function. The ingested data was written to processed layer in Delta format.</p>
+										<pre><code>def merge_delta_data(input_df,db_name,table_name,folder_path, merge_condition, partition_column):									
+    spark.conf.set('spark.databricks.optimizer.dynamicPartitionPruning', 'true')
+
+    from delta.tables import DeltaTable
+    if (spark.catalog.tableExists(f'{db_name}.{table_name}')):
+        deltaTable = DeltaTable.forPath(spark, f'{folder_path}/{table_name}')
+        deltaTable.alias('r').merge(input_df.alias('f'), merge_condition) \
+                            .whenMatchedUpdateAll() \
+                            .whenNotMatchedInsertAll() \
+                            .execute()
+    else:
+        input_df.write.mode('overwrite').partitionBy(partition_column).format('delta').saveAsTable(f'{db_name}.{table_name}')
+											</code></pre>
+										
+										<strong><h3>STEP 2: Data Transformation</h3></strong>
+										<p>To create a comprehensive race-results Delta table, the races, circuits, constructors, drivers, and results tables were joined together using Spark DataFrame API. This Delta table could also be loaded incrementally using Spark SQL. It contains the results of every race in every year, along with information about the race, circuit, driver, and their respective results, as well as the file_date and created_date. This table was then written to the presentation layer in Azure ADLS Gen2, enabling further analytical usage. Using this data, Top 10 Drivers/Teams of every race year and of all time were created and saved back into the Delta lake. </p>
+										<p>Next, I created the drivers_standing and constructors_standing tables by processing the data from the race_results Delta table. The drivers_standing and constructors_standing tables provide valuable information such as the total points earned, ranking, and number of wins for drivers and constructors in each race year. These tables were also written to the presentation layer in Azure ADLS Gen2, which allows for further analysis.</p>
+									  <h3>STEP 3: Copy transformed data to Azure SQL Database</h3>
+									  <p>The transformed data was then copied to an Azure SQL database using the Pandas library. The necessary connection information, such as the hostname, database name, and port, were provided to establish the database connection.  Once the connection was established, the transformed data in the form of the DataFrame was written to Azure SQL database using the DataFrameWriter function with the specified parameters, including the overwrite mode and connection properties.</p>
+									  <pre><code>
+jdbcHostname = "....database.windows.net"
+jdbcDatabase='db-....'
+jdbcPort="1433"
+properties= {"user":"user","password":"password"}
+url = "jdbc:sqlserver://{0}:{1};database={2}".format(jdbcHostname,jdbcPort,jdbcDatabase)
+df3=DataFrameWriter(df_top10_driver_sql)
+df3.jdbc(url,table="[f1_reporting].[top10_drivers_every_year_sql]",mode="Overwrite",properties=properties)								
+										
+																				</code></pre>
+									<p>All Databricks Notebooks can be found <a href="https://github.com/rosienhn/Formula1_DataPlatform_DataEngineer/tree/main/Databricks%20Notebooks">here</a>.</p>
+									
+									
+									<hr class="major" />
+									<h2>Data Orchestration in Azure Data Factory</h2>
 									<div class="image">
 										<p>I designed a master pipeline that consists of two sub-pipelines, each of which is responsible for a specific set of tasks. This architecture is well-suited for building a data processing pipeline that can handle large volumes of data and produce reliable, high-quality output. By breaking the pipeline down into smaller, more manageable tasks, I can ensure that each component is easier to build, test, and debug, which can help to improve overall pipeline efficiency and reliability.</p>
 										<img src="image2/masterpipeline.png" alt="" />
@@ -264,15 +251,6 @@ display(dbutils.fs.mounts())
 									</section>
 
 								</section>
-								<hr class="major" />
-									<h2>Databricks Notebook Activities</h2>
-									
-									<p>All Databricks Notebooks can be found <a href="https://github.com/rosienhn/Formula1_DataPlatform_DataEngineer/tree/main/Databricks%20Notebooks">here</a>.</p>
-									<div class="image">
-										
-										
-									</div>
-									</section>
 
 						</div>
 					</div>
