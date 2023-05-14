@@ -1,0 +1,211 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>My portfolio</title>
+		<hr class="major" />
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets1/css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+
+							<!-- Header -->
+								<header id="header">
+									<a href="index.html" class="logo"><strong>Welcome to my portfolio!</strong></a>
+									<ul class="icons">
+										<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+										<li><a href="https://www.linkedin.com/in/nhung-nguyen-hong/" class="icon brands fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+										<li><a href="https://github.com/rosienhn" class="icon brands fa-github"><span class="label">Github</span></a></li>
+										<li><a href="mailTo:nguyenhongnhunghr@gmail.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+									</ul>
+								</header>
+
+							
+							
+								<!-- Content -->
+								<section>
+									<header class="main">
+										<h1>Build a cloud-based Lambda Architecture to process the telemetry data from the sailing boats</h1>
+										<h5>15 May, 2023</h5>
+										<h3>Azure Synapse Analytic | Azure Event Hubs | Azure Streams Analytic</h3>
+									</header>
+									<span class="image main"><img src="" alt="" /></span>
+									
+									<h2 id="content">Project Overview</h2>
+													
+									<div>
+									  <p>
+										The Vendée Globe is an around-the-world yacht race that is sailed solo and non-stop. It was founded by Philippe Jeantot in 1989 and is considered to be an extremely challenging test of individual endurance and ocean racing. The race is held every four years, and the most recent edition, the 9th, took place in 2020-2021. French sailor Yannick Bestaven was the winner, completing the race in just over 80 days. Throughout the race, spectators were able to track the progress of the boats in real-time on an online racing dashboard. The technology used for this live tracking was provided by Nokia.</p>
+										<p>In this scenario, I will take on the role of Nokia and design a cloud-based Lambda Architecture to process telemetry data from sailing boats. The architecture will be built on the Azure platform and include a real-time path for processing sailing boat data as it is received, as well as a batch processing path for collecting sailing boat data in batches and performing calculations on those batches.</p>
+										<p>As the race is not currently taking place, a Python simulator was used to generate boat telemetry data for a fleet of 10 racing participants. This Python race simulation app was configured to send data to the Event Hub in the Azure cloud every 60 seconds.To successfully complete this business case, I undertook the following steps:
+											<br>1. Design a Lambda Architecture in Azure that includes both real-time and batch-processing paths. The architecture incorporate an Event Hub, a Stream Analytics Job, a Stream Analytics Job, an output to PowerBI, and a second output to a Azure ADLS Gen2.
+											<br>2. Create a Power BI dashboard that shows a world map with the current location of each racing team, as well as a table ranking the teams by their position in the race. 
+											
+										
+															
+																					
+														
+																			
+									<hr class="major" />
+
+									<h2>Challenges</h2>								
+										<div class="content">																									
+													<p>Throughout the course of this business case, we will encounter a number of challenges that need to be addressed:</p>
+																											
+														<ul>
+															<li>The occasional production of garbled data by the Python app, which needs to be filtered out to ensure only clean data is delivered to the Power BI dashboard.</li>
+															<li>The need to calculate a ranked list of sailing teams and determine who is currently leading the race</li>
+															<li>The selection of an appropriate data service for the batch-processing path in the Lambda Architecture.</li>
+															<li>The presentation of data in an effective manner in the Power BI dashboard.</li>
+														</ul>
+												<p>While there may be various solutions available to address each of these challenges, we have made specific decisions on how to tackle them to arrive at our final solution</p>
+											
+										</div>
+																			
+										
+									<hr class="major" />
+									<h2>First Solution </h2>
+										<ul>
+											<li>The architecture includes three layers: the raw layer(Bronze layer), the processed layer(Silver layer), and the presentation layer(or Gold layer).</li>
+											<li>Data will be uploaded to raw layer in csv/json format and ingested using Databricks Notebooks before being stored in the processed layer in delta format.</li>
+											
+																					  
+										</ul>
+										<p>The below image represents the solution architechture for this project:</p>
+										<div class="image">
+											<img src="image2/." alt="" />
+										</div>
+										<p>The pipeline architecture is based on industry research and best practices, with reference to similar architecture from Microsoft and Databricks.</p>
+										
+										
+									
+									
+
+									<h2>Environment setup</h2>
+									<ol type='i'>
+										<li>Azure subcription
+										<li>Azure Data Lake Storage Gen2
+										<li>Azure Synapse Analytics
+										<li>Power BI																				
+									</ol>
+									<ul> <p><b>Languages</b></p>
+										<li>T-SQL
+										
+																
+								
+								
+									<h2>Projects in steps</h2>
+									
+									
+									<hr class="major" />
+									<h2>Second solution</h2>
+									<div class="image">
+										<img src="image2/." alt="" />
+										<img src="image2/." alt="" />
+										<img src="image2/." alt="" />
+										
+									</div>
+									</section>
+
+								</section>
+
+						</div>
+					</div>
+
+				<!-- Sidebar -->
+					<div id="sidebar">
+						<div class="inner">
+
+							<!-- Search -->
+								<section id="search" class="alt">
+									<form method="post" action="#">
+										<input type="text" name="query" id="query" placeholder="Search" />
+									</form>
+								</section>
+
+							<!-- Menu -->
+								<nav id="menu">
+									<header class="major">
+										<h2>Menu</h2>
+									</header>
+									<ul>
+										<li><a href="index.html">Homepage</a></li>
+										<li><a href="my projects.html">My projects</a></li>
+										<li><a href="#">My Resume</a></li>
+										
+									</ul>
+								</nav>
+
+							<!-- Items -->
+					<section class="wrapper style1 align-center">
+						<div class="inner">
+							<h3>Diploma & Certificates</h3>
+							<!--<p>This is an <strong>Items</strong> element, and it's basically just a grid for organizing items of various types. You can customize its <span class="demo-controls">appearance with a number of modifiers</span>, as well as assign it an optional <code>onload</code> or <code>onscroll</code> transition modifier (<a href="#reference-items">details</a>).</p>-->
+							<div class="items style1 medium onscroll-fade-in">
+								<section>
+									<span class="icon style2 major fa-gem"></span>
+									<h3>Microsoft Azure Data Engineer</h3>
+									<p>DP-203 certification-to be obtained</p>
+								</section>
+								<section>
+									<span class="icon solid style2 major fa-save"></span>
+									<h3>Certified Microsoft Azure Data Analyst</h3>
+									<p>PL-300 certification</p>
+								</section>
+								<section>
+									<span class="icon solid style2 major fa-chart-bar"></span>
+									<h3>Microsoft Azure Data Fundamental</h3>
+									<p>AZ-900 Certification</p>
+								</section>
+								<section>
+									<span class="icon style2 major fa-paper-plane"></span>
+									<h3>Msc Human Resource Studies</h3>
+									<p>Tilburg University</p>
+								</section>
+							</div>
+
+						<!-- Section -->
+							<section>
+								<header class="major">
+									<h2>Get in touch</h2>
+								</header>
+								<p>Like what you see?
+
+									I'd love to hear from you!</p>
+								<ul class="contact">
+									<li class="icon solid fa-envelope"><a href="#">nguyenhongnhunghr@gmail.com</a></li>
+									<li class="icon solid fa-phone"> 0628501248</li>
+								</ul>
+							</section>
+
+							<!-- Footer -->
+								<footer id="footer">
+									<p class="copyright">&copy; Copyright 2023. All rights reserved<a href="#"></a><a href="#"></a>.</p>
+								</footer>
+
+						</div>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets1/js/jquery.min.js"></script>
+			<script src="assets1/js/browser.min.js"></script>
+			<script src="assets1/js/breakpoints.min.js"></script>
+			<script src="assets1/js/util.js"></script>
+			<script src="assets1/js/main.js"></script>
+
+	</body>
+</html>
