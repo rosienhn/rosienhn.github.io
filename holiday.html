@@ -1,0 +1,221 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>My portfolio</title>
+		<hr class="major" />
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets1/css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+
+							<!-- Header -->
+								<header id="header">
+									<a href="index.html" class="logo"><strong>Welcome to my portfolio!</strong></a>
+									<ul class="icons">
+										
+										<li><a href="https://www.linkedin.com/in/nhung-nguyen-hong/" class="icon brands fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+										<li><a href="https://github.com/rosienhn" class="icon brands fa-github"><span class="label">Github</span></a></li>
+										<li><a href="mailTo:nguyenhongnhunghr@gmail.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+									</ul>
+								</header>
+
+							
+							
+								<!-- Content -->
+								<section>
+									<header class="main">
+										<h1>Analyze different types of travelers and their feedback about Techionista Holidays</h1>
+										<h5>15 Feb, 2023</h5>
+										<h3>Azure Cognitive Services | Power BI</h3>
+									</header>
+									<span class="image main"><img src="" alt="" /></span>
+									
+									<h2 id="content">Project Overview</h2>
+													
+									<div>
+									  <p>In this project we worked with an extensive dataset from Techionista Holidays. Among other information, it contains reviews from their users after their stay at a hotel they booked through
+										the Techionista Holidays website. These reviews date from 2015 to 2017 and contain lots of information on how travelers have experienced their stay in various luxurious hotels across Europe.
+										Techionista Holidays managers would love to gain more insight into the different types of travelers and their feedback. These valuable insights can help them improve Techionista's Holidays website and
+										their capability of catering to their users needs</p>
+									 <p>The dataset, containing 515,000 customer reviews and scoring of 1493 luxury hotels across Europe, is stored in Azure Blob Storage. To analyze this dataset, we need to establish a connection to it from Power BI Desktop. Here is the dataset description: </p>
+										 <ul>
+											<li>Hotel_Address: Address of hotel.
+											<li>Review_Date: Date when reviewer posted the corresponding review.
+											<li>Average_Score: Average score of the hotel, calculated based on the latest comment in the last year.
+											<li>Hotel_Name: Name of hotel.
+											<li>Reviewer_Nationality: Nationality of reviewer.
+											<li>Negative_Review: Negative review the reviewer gave to the hotel. If the reviewer does not give a negative review, then it should be: 'No Negative'.
+											<li>Review_Total_Negative_Word_Counts: Total number of words in the negative review.
+											<li>Positive_Review: Positive review the reviewer gave to the hotel. If the reviewer does not give a positive review, then it should be: 'No Positive'.
+											<li>Review_Total_Positive_Word_Counts: Total number of words in the positive review.
+											<li>Reviewer_Score: Score the reviewer has given to the hotel, based on his/her experience.
+											<li>Total_Number_of_Reviews_Reviewer_Has_Given: Number of reviews the reviewer has given in the past.
+											<li>Total_Number_of_Reviews: Total number of valid reviews the hotel has.
+											<li>Tags: Tags reviewers used in their review.
+											<li>days_since_review: Duration between the review date and scrape date (the scrape date being the date the data was scraped from the Booking.com website, which is about 4 years ago).
+											<li>Additional_Number_of_Scoring: Some guests only made a scoring on the service rather than providing a review. This number indicates how many of those valid scores a hotel has that don't include a review.
+											<li>lat: Latitude of the hotel.
+											<li>lng: Longitude of the hotel.
+										 </ul>
+																		
+									<hr class="major" />
+
+									<h2>Challenges</h2>								
+										<div class="content">																									
+											<p>The reviews pose a challenge as they are in the form of free text fields. While these text fields contain rich information, deriving aggregated insights becomes challenging because the data is qualitative rather than numerical. Analyzing every individual written statement about the hotels would be an impractical task.</p>
+										</div>
+																			
+										
+									<hr class="major" />
+									<h2>Step by Step solution </h2>
+									<p><strong>STEP 1: Define Business Requirements<p></strong>
+										<p>Initially, we identified the key information that the managers of Techionista Holidays desired based on the Business Case. The objective was to provide insights into different types of travelers and their feedback, enabling improvements to Techionista's Holidays website to better cater to user needs. To accomplish this, we determined that it was crucial to combine traveler information with their reviews. The specific insights we aimed to provide included:
+											<ul>
+												<li>Traveler type (e.g., couple, friends, kids)
+													<li>Trip purpose
+													<li>Reviewer nationality
+													<li>Length of stay
+													<li>Booking device
+													<li>Country visited
+													<li>Reviewer score
+											</ul>
+											<p>To gain a deeper understanding and facilitate meaningful comparisons among the reviews, we made the decision to perform both sentiment analysis and keyword phrase analysis. The objective was twofold: first, to derive an overall score that represents the sentiment of each review, and second, to identify specific positive or negative words used within the reviews. By conducting these analyses, we aimed to extract valuable insights and uncover patterns, enabling us to assess the overall sentiment and identify key aspects that contribute to positive or negative feedback from travelers.</p>
+											</p>
+										<p><strong>STEP 2: Transforming and Cleaning<p></strong>	
+											<p>After establishing a connection with the dataset stored in Azure Blob Storage, we proceeded with data cleaning and transformation.</p>
+											<ul>
+												<li>Initially, we eliminated errors and unnecessary columns, followed by renaming columns and adjusting data types as required. Since our focus was on traveler types and their reviews, information specifically related to hotels was deemed unnecessary and therefore eliminated from the dataset.
+												<li>To extract additional insights, we utilized the 'Tags' column and implemented conditional columns to create new columns for trip purpose, number of nights, traveler type, and country of the hotel.
+												<li>For enhanced filtering capabilities, we divided the large table into smaller Dim tables.
+												<li>To validate the sentiment analysis, we initially selected 75 rows and successfully applied Azure Cognitive Services.
+												<li>Subsequently, we focused our analysis on the top 100,000 rows of data, specifically targeting reviews from 2017 and eliminating rows without traveler type information.
+												<li>To facilitate sentiment analysis, we duplicated the positive and negative reviews and merged them into a single column.
+												<li>Finally, we conducted a key phrase analysis on both the negative and positive review columns to extract further insights from the data.
+												
+											</ul>
+										<p><strong>STEP 3: POWER BI DASHBOARD/REPORT<p></strong>	
+											<p>In summary, our approach in building the dashboard involved the following steps:</p>
+											<ul>
+												<li>Created a date table and established necessary relationships in the Model view.
+												<li>Added relevant measures for future dashboard visuals in the Report view.
+												<li>Developed a profile of 'The Techionista Traveler' with the ability to showcase outcomes for different traveler types, enabling the marketing team to focus on specific groups in their marketing efforts.
+												<li>Implemented slicers to enable users to filter and explore different combinations of traveler groups.
+												<li>Utilized a column chart to illustrate variations in sentiment across different traveler types.
+												<li>Incorporated a map visual to display the geographic distribution of reviewers.
+												<li>present the results of both sentiment analysis and keyword phrase analysis.
+												<li>Leveraged key phrases, both positive and negative, to identify specific words frequently used by particular groups for marketing purposes
+												<li>Utilized sentiment analysis to compare the sentiment across countries visited by reviewers and to identify key influencers that impact the sentiment of specific groups, offering valuable insights for marketing goals.
+											</ul>
+										<hr class="major" />
+									<h4> </h4>
+									<div class="image">
+										<img src="image2/." alt="" />
+										<img src="image2/." alt="" />
+										<img src="image2/." alt="" />
+										
+									</div>
+									</section>
+
+								</section>
+
+						</div>
+					</div>
+
+				<!-- Sidebar -->
+					<div id="sidebar">
+						<div class="inner">
+
+							<!-- Search -->
+								<section id="search" class="alt">
+									<form method="post" action="#">
+										<input type="text" name="query" id="query" placeholder="Search" />
+									</form>
+								</section>
+
+							<!-- Menu -->
+								<nav id="menu">
+									<header class="major">
+										<h2>Menu</h2>
+									</header>
+									<ul>
+										<li><a href="index.html">Homepage</a></li>
+										<li><a href="my projects.html">My projects</a></li>
+										<li><a href="#">My Resume</a></li>
+										
+									</ul>
+								</nav>
+
+							<!-- Items -->
+					<section class="wrapper style1 align-center">
+						<div class="inner">
+							<h3>Diploma & Certificates</h3>
+							<!--<p>This is an <strong>Items</strong> element, and it's basically just a grid for organizing items of various types. You can customize its <span class="demo-controls">appearance with a number of modifiers</span>, as well as assign it an optional <code>onload</code> or <code>onscroll</code> transition modifier (<a href="#reference-items">details</a>).</p>-->
+							<div class="items style1 medium onscroll-fade-in">
+								<section>
+									<span class="icon style2 major fa-gem"></span>
+									<h3>Microsoft Azure Data Engineer</h3>
+									<p>DP-203 certification-to be obtained</p>
+								</section>
+								<section>
+									<span class="icon solid style2 major fa-save"></span>
+									<h3>Certified Microsoft Azure Data Analyst</h3>
+									<p>PL-300 certification</p>
+								</section>
+								<section>
+									<span class="icon solid style2 major fa-chart-bar"></span>
+									<h3>Microsoft Azure Data Fundamental</h3>
+									<p>AZ-900 Certification</p>
+								</section>
+								<section>
+									<span class="icon style2 major fa-paper-plane"></span>
+									<h3>Msc Human Resource Studies</h3>
+									<p>Tilburg University</p>
+								</section>
+							</div>
+
+						<!-- Section -->
+							<section>
+								<header class="major">
+									<h2>Get in touch</h2>
+								</header>
+								<p>Like what you see?
+
+									I'd love to hear from you!</p>
+								<ul class="contact">
+									<li class="icon solid fa-envelope"><a href="#">nguyenhongnhunghr@gmail.com</a></li>
+									<li class="icon solid fa-phone"> 0628501248</li>
+								</ul>
+							</section>
+
+							<!-- Footer -->
+								<footer id="footer">
+									<p class="copyright">&copy; Copyright 2023. All rights reserved<a href="#"></a><a href="#"></a>.</p>
+								</footer>
+
+						</div>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets1/js/jquery.min.js"></script>
+			<script src="assets1/js/browser.min.js"></script>
+			<script src="assets1/js/breakpoints.min.js"></script>
+			<script src="assets1/js/util.js"></script>
+			<script src="assets1/js/main.js"></script>
+
+	</body>
+</html>
