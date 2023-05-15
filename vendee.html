@@ -91,30 +91,22 @@
 											<img src="image2/solution1.png" alt="" />
 										</div>
 										
-									<h3>Environment setup</h3>
-									<ol type='i'>
-										<li>Azure subcription
-										<li>Set up Azure Event Hubs
-										<li>Configure the Python simulator to connect with the Event Hub
-										<li>Set up Azure Stream Analytics outputs for data streaming to Power BI and batch data to Data Lake
-										<li>Azure Data Lake Storage Gen2
-										<li>Azure Synapse Analytics
-										<li>Power BI Premium																				
-									</ol>
+									
 																	
 									<h3>Projects in steps</h3>
-									<h4><strong>STEP 1: Python Data Generator<strong></h4>
+									<p><strong>STEP 1: Python Data Generator</strong></p>
+										<p>The Python simulator was configured to connect with the Event Hub.</p>
 									<div class="image">
 										<img src="image2/pyapp.png" alt="" />
 									</div>
 									<br>
-									<h4>STEP 2: Set up Azure Event Hub and Azure Stream Analytic</h4>
+									<p><strong>STEP 2: Set up Azure Event Hub and Azure Stream Analytic<p></strong>
 										
 									<p>In Azure Stream Analytics, 2 outputs were established for the streaming job. </p>
 									<div class="image">
 										<img src="image2/outputs.png" alt="" />
 									</div>
-									<p>The "outputadls" output saves processed data into the cool tier of ADLS Gen2, while the "outputpowerbi" output enables real-time streaming of boat location data to the Power BI service. The Power BI Map visualization is then utilized to visually represent the current boat locations and the routes they have taken. For each output, we implemented a query in Azure Stream Analytics to handle invalid data that was being streamed. As shown in the provided screenshot, both queries were designed to exclude any rows with invalid longitude or latitude values.</p>
+									<p>The "outputadls" output saves processed data into the cool tier of ADLS Gen2, while the "outputpowerbi" output enables real-time streaming of boat location data to the Power BI service. The Power BI Map visualization is then utilized to visually represent the current boat locations and the routes they have taken. For each output, we implemented a query in Azure Stream Analytics to handle invalid data that was being streamed. </p>
 									<p>For batch data to ADLS Gen2, we utilized the TRY_CAST function to make sure the data types are converted correctly. If the conversion is successful, the expression is returned in the desired data type; otherwise, it returns null. Therefore, we selected only rows that were not null after the conversion.</p>
 									<pre><code>SELECT
     TRY_CAST(boat AS bigint)as boat,
@@ -138,7 +130,7 @@ WHERE latitude>=-90 and latitude<=90
     and TRY_CAST(speed AS float)is not NULL
     and TRY_CAST(PartitionId AS bigint) is not NULL
 										</code></pre>
-									<p>For the realtime streaming to Power BI, we filtered the value based on the values of longitude/latitude and boat</p>
+									<p>For the realtime streaming to Power BI, queries were designed to exclude any rows with invalid longitude/latitude/boat values:</p>
 									<pre><code>SELECT *
 INTO
     [outputpowerbi]
@@ -147,8 +139,43 @@ FROM
 WHERE latitude>=-90 and latitude<=90
     and longitude>=-180 and longitude<=180 and boat >=0
 										</code></pre>
-									
-									<hr class="major" />
+									<p><strong>STEP 3: Processing Batch location using Serverless pool in Azure Synapse Analytic<p></strong>
+										<p>Within Synapse, we used serverless pools to create an external table. This external table served as a connection point to access the boat data. Using the external table, we proceeded to create a view in order to obtain speed statistics for each boat. To achieve this, a window row function was employed to retrieve the statistics for the previous hour and the current hour for each boat. It is important to note that the query assumes one message is received per minute for each boat. The query focused on a one-hour timeframe, but it can be modified to accommodate longer durations (daily, weekly, or monthly) if needed.</p>
+										<pre><code>CREATE VIEW boat_speed_info
+AS
+SELECT TOP(10) boat, Event_Enqueued_Time,
+    AVG(speed) OVER(PARTITION BY boat ORDER BY Event_Enqueued_Time ASC ROWS BETWEEN 59 PRECEDING AND CURRENT ROW) as current_avg,
+    AVG(speed) OVER(PARTITION BY boat ORDER BY Event_Enqueued_Time ASC ROWS BETWEEN 119 PRECEDING AND 60 PRECEDING) as previous_avg,
+FROM [dbo].[batch_sailing_data]
+ORDER BY Event_Enqueued_Time DESC, boat DESC;
+</code></pre>
+										<p>Using the previously created external table, we constructed a view that served as the basis for ranking the boats. In this view, we utilized the average starting point for all boats as the reference position. To calculate the distance traveled by each boat from this starting position to their last captured location, here's the SQL code for the boat_ranking view:</p>
+										<pre><code>CREATE VIEW boat_ranking AS
+SELECT a.boat, 
+        a.Event_Enqueued_Time,
+        (ACOS(SIN(PI()*latitude/180.0)
+        *SIN(PI()*38.6229928062711/180.0)+COS(PI()*latitude/180.0)
+        *COS(PI()*38.6229928062711/180.0)*COS(PI()*-90.3924249113984/180.0-PI()*longitude/180.0))*6371) as distance       
+FROM [dbo].[batch_sailing_data] as a
+INNER JOIN (
+    SELECT boat, MAX(Event_Enqueued_Time) as "Last_captured"
+    FROM [dbo].[batch_sailing_data]
+    GROUP BY boat) as b
+ON a.boat = b.boat AND a.Event_Enqueued_Time = b.Last_captured
+</code></pre>
+											<p>Following this, we created another view to determine the distance between each boat and the boat ranked 1 (i.e., the boat with the longest distance traveled). Here's the SQL code for the boat_ranking_with_distance_to_rank_1 view:</p>
+											<pre><code>CREATE VIEW boat_ranking_with_distance_to_rank_1 AS
+SELECT boat, Event_Enqueued_Time, c.distance, d.distance - c.distance AS distance_to_catch_up
+FROM boat_ranking as c, 
+(SELECT TOP(1) distance 
+FROM boat_ranking
+ORDER BY distance DESC) as d
+												</code></pre>
+											
+
+
+
+										<hr class="major" />
 									<h2>2nd proposed architecture using Databricks and Azure Data Factory </h2>
 									<div class="image">
 										<img src="image2/." alt="" />
