@@ -103,14 +103,50 @@
 									</ol>
 																	
 									<h3>Projects in steps</h3>
-									<p>STEP 1: Python Data Generator</p>
+									<h4><strong>STEP 1: Python Data Generator<strong></h4>
 									<div class="image">
 										<img src="image2/pyapp.png" alt="" />
 									</div>
-									<p>STEP 1: Set up Azure Event Hub</p>
-									
-
-									
+									<br>
+									<h4>STEP 2: Set up Azure Event Hub and Azure Stream Analytic</h4>
+										
+									<p>In Azure Stream Analytics, 2 outputs were established for the streaming job. </p>
+									<div class="image">
+										<img src="image2/outputs.png" alt="" />
+									</div>
+									<p>The "outputadls" output saves processed data into the cool tier of ADLS Gen2, while the "outputpowerbi" output enables real-time streaming of boat location data to the Power BI service. The Power BI Map visualization is then utilized to visually represent the current boat locations and the routes they have taken. For each output, we implemented a query in Azure Stream Analytics to handle invalid data that was being streamed. As shown in the provided screenshot, both queries were designed to exclude any rows with invalid longitude or latitude values.</p>
+									<p>For batch data to ADLS Gen2, we utilized the TRY_CAST function to make sure the data types are converted correctly. If the conversion is successful, the expression is returned in the desired data type; otherwise, it returns null. Therefore, we selected only rows that were not null after the conversion.</p>
+									<pre><code>SELECT
+    TRY_CAST(boat AS bigint)as boat,
+    TRY_CAST(latitude AS float)as latitude,
+    TRY_CAST(longitude AS float)as longitude,
+    TRY_CAST(heading AS float)as heading,
+    TRY_CAST(speed AS float)as speed,
+    TRY_CAST(EventProcessedUtcTime AS datetime) as Event_Processed_Time,
+    TRY_CAST(PartitionId AS bigint)as PartitionId,
+    TRY_CAST(EventEnqueuedUtcTime AS datetime) as Event_Enqueued_Time
+INTO
+    [outputadls]
+FROM 
+    [input-eventhub]
+WHERE latitude>=-90 and latitude<=90
+    and longitude>=-180 and longitude<=180 and boat >=0
+    and TRY_CAST(boat AS bigint)is not NULL
+    and TRY_CAST(latitude AS float) is not NULL
+    and TRY_CAST(longitude AS float) is not NULL
+    and TRY_CAST(heading AS float) is not NULL
+    and TRY_CAST(speed AS float)is not NULL
+    and TRY_CAST(PartitionId AS bigint) is not NULL
+										</code></pre>
+									<p>For the realtime streaming to Power BI, we filtered the value based on the values of longitude/latitude and boat</p>
+									<pre><code>SELECT *
+INTO
+    [outputpowerbi]
+FROM 
+    [input-eventhub]
+WHERE latitude>=-90 and latitude<=90
+    and longitude>=-180 and longitude<=180 and boat >=0
+										</code></pre>
 									
 									<hr class="major" />
 									<h2>2nd proposed architecture using Databricks and Azure Data Factory </h2>
