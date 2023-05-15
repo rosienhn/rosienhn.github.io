@@ -70,47 +70,50 @@
 															<li>The selection of an appropriate data service for the batch-processing path in the Lambda Architecture.</li>
 															<li>The presentation of data in an effective manner in the Power BI dashboard.</li>
 														</ul>
-												<p>While there may be various solutions available to address each of these challenges, we have made specific decisions on how to tackle them to arrive at our final solution</p>
+												<p>While there may be various solutions available to address each of these challenges, I made specific decisions on how to tackle them to arrive at our 2 different solution</p>
 											
 										</div>
 																			
 										
 									<hr class="major" />
-									<h2>First Solution </h2>
+									<h2>1st proposed architecture using Azure Synapse Analytic </h2>
+										<p>The architecture involves utilizing an Event Hub for data collection, a Stream Analytics Job for real-time and batch processing, Azure Data Lake Gen2 for data storage, Synapse serverless pools for batch calculations, and a Power BI dashboard for data visualization</p>
+										<p>The departure point for the boats is located in the southern region of Portugal. These boats embark on a south-eastward journey around the globe, continuously transmitting their location data every 60 seconds. With this scenerio, we settled on the following architectural solution: </p>
 										<ul>
-											<li>The architecture includes three layers: the raw layer(Bronze layer), the processed layer(Silver layer), and the presentation layer(or Gold layer).</li>
-											<li>Data will be uploaded to raw layer in csv/json format and ingested using Databricks Notebooks before being stored in the processed layer in delta format.</li>
-											
-																					  
+											<li>Azure Event Hubs: This component serves as a centralized hub for collecting sailing boat data.The Python simulator was used to stream the data directly to the Event Hub.</li>
+											<li>The Stream Analytics Job is responsible for processing the incoming data in real time, utilizing both a hot tier for immediate processing and a cool tier for batch processing.</li>
+											<li>The processed data is stored in Azure ADLS Gen2, providing a robust and scalable storage solution for large volumes of data.</li>
+											<li>Synapse serverless pools are employed to accumulate the processed data batches and perform batch calculations, such as ranking and speed analysis, without the need for dedicated resources.</li>		
+											<li>Power BI Premium: To visualize the insights gained from both real-time and batch data, a Power BI dashboard is utilized. This dashboard offers a user-friendly interface for displaying the analyzed data and providing valuable insights</li>								  
 										</ul>
-										<p>The below image represents the solution architechture for this project:</p>
+										<p>The below image represents the 1st solution architechture.</p>
 										<div class="image">
-											<img src="image2/." alt="" />
+											<img src="image2/solution1.png" alt="" />
 										</div>
-										<p>The pipeline architecture is based on industry research and best practices, with reference to similar architecture from Microsoft and Databricks.</p>
 										
-										
-									
-									
-
-									<h2>Environment setup</h2>
+									<h3>Environment setup</h3>
 									<ol type='i'>
 										<li>Azure subcription
+										<li>Set up Azure Event Hubs
+										<li>Configure the Python simulator to connect with the Event Hub
+										<li>Set up Azure Stream Analytics outputs for data streaming to Power BI and batch data to Data Lake
 										<li>Azure Data Lake Storage Gen2
 										<li>Azure Synapse Analytics
-										<li>Power BI																				
+										<li>Power BI Premium																				
 									</ol>
-									<ul> <p><b>Languages</b></p>
-										<li>T-SQL
-										
-																
-								
-								
-									<h2>Projects in steps</h2>
+																	
+									<h3>Projects in steps</h3>
+									<p>STEP 1: Python Data Generator</p>
+									<div class="image">
+										<img src="image2/pyapp.png" alt="" />
+									</div>
+									<p>STEP 1: Set up Azure Event Hub</p>
+									
+
 									
 									
 									<hr class="major" />
-									<h2>Second solution</h2>
+									<h2>2nd proposed architecture using Databricks and Azure Data Factory </h2>
 									<div class="image">
 										<img src="image2/." alt="" />
 										<img src="image2/." alt="" />
