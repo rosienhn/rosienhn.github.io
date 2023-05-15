@@ -140,7 +140,35 @@ WHERE latitude>=-90 and latitude<=90
     and longitude>=-180 and longitude<=180 and boat >=0
 										</code></pre>
 									<p><strong>STEP 3: Processing Batch location using Serverless pool in Azure Synapse Analytic<p></strong>
-										<p>Within Synapse, we used serverless pools to create an external table. This external table served as a connection point to access the boat data. Using the external table, we proceeded to create a view in order to obtain speed statistics for each boat. To achieve this, a window row function was employed to retrieve the statistics for the previous hour and the current hour for each boat. It is important to note that the query assumes one message is received per minute for each boat. The query focused on a one-hour timeframe, but it can be modified to accommodate longer durations (daily, weekly, or monthly) if needed.</p>
+										<p>Within Synapse, we used serverless pools to create an external table. This external table served as a connection point to access the boat data. </p>
+										<pre><code>IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseParquetFormat') 
+	CREATE EXTERNAL FILE FORMAT [SynapseParquetFormat] 
+	WITH ( FORMAT_TYPE = PARQUET)
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'vendee-streamdata_dlrosies_dfs_core_windows_net') 
+	CREATE EXTERNAL DATA SOURCE [vendee-streamdata_dlrosies_dfs_core_windows_net] 
+	WITH (LOCATION = 'abfss://vendee-streamdata@dlrosies.dfs.core.windows.net')
+GO
+
+CREATE EXTERNAL TABLE [dbo].[batch_sailing_data] (
+	[boat] bigint,
+	[latitude] float,
+	[longitude] float,
+	[heading] float,
+	[speed] float,
+	[Event_Processed_Time] datetime2(7),
+	[PartitionId] bigint,
+	[Event_Enqueued_Time] datetime2(7)
+	)
+	WITH (
+	LOCATION = 'sailingdata/**',
+	DATA_SOURCE = [vendee-streamdata_dlrosies_dfs_core_windows_net],
+	FILE_FORMAT = [SynapseParquetFormat])
+GO</code></pre>
+										
+										
+										<p>Using the external table, we proceeded to create a view in order to obtain speed statistics for each boat. To achieve this, a window row function was employed to retrieve the statistics for the previous hour and the current hour for each boat. It is important to note that the query assumes one message is received per minute for each boat. The query focused on a one-hour timeframe, but it can be modified to accommodate longer durations (daily, weekly, or monthly) if needed.</p>
 										<pre><code>CREATE VIEW boat_speed_info
 AS
 SELECT TOP(10) boat, Event_Enqueued_Time,
@@ -150,6 +178,7 @@ FROM [dbo].[batch_sailing_data]
 ORDER BY Event_Enqueued_Time DESC, boat DESC;
 </code></pre>
 										<p>Using the previously created external table, we constructed a view that served as the basis for ranking the boats. In this view, we utilized the average starting point for all boats as the reference position. To calculate the distance traveled by each boat from this starting position to their last captured location, here's the SQL code for the boat_ranking view:</p>
+										<p>To calculate the distance traveled by each boat from a starting position to their last captured location, the Haversine formula was used to estimate the distance between two points on the Earth's surface, given their latitude and longitude coordinates</p>
 										<pre><code>CREATE VIEW boat_ranking AS
 SELECT a.boat, 
         a.Event_Enqueued_Time,
@@ -171,10 +200,11 @@ FROM boat_ranking as c,
 FROM boat_ranking
 ORDER BY distance DESC) as d
 												</code></pre>
-											
-
-
-
+										<p><strong>STEP 4: Connect to Power BI and complete the Dashboard<p></strong>	
+											<div class="image">
+												<img src="image2/vendeepb.png" alt="" />
+												
+											</div>
 										<hr class="major" />
 									<h2>2nd proposed architecture using Databricks and Azure Data Factory </h2>
 									<div class="image">
