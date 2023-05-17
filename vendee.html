@@ -48,15 +48,9 @@
 									<div>
 									  <p>
 										The Vendée Globe is an around-the-world yacht race that is sailed solo and non-stop. It was founded by Philippe Jeantot in 1989 and is considered to be an extremely challenging test of individual endurance and ocean racing. The race is held every four years, and the most recent edition, the 9th, took place in 2020-2021. French sailor Yannick Bestaven was the winner, completing the race in just over 80 days. Throughout the race, spectators were able to track the progress of the boats in real-time on an online racing dashboard. The technology used for this live tracking was provided by Nokia.</p>
-										<p>In this scenario, I will take on the role of Nokia and design a cloud-based Lambda Architecture to process telemetry data from sailing boats. The architecture will be built on the Azure platform and include a real-time path for processing sailing boat data as it is received, as well as a batch processing path for collecting sailing boat data in batches and performing calculations on those batches.</p>
-										<p>As the race is not currently taking place, a Python simulator was used to generate boat telemetry data for a fleet of 10 racing participants. This Python race simulation app was configured to send data to the Event Hub in the Azure cloud every 60 seconds.To successfully complete this business case, I undertook the following steps:
-											<br>1. Design a Lambda Architecture in Azure that includes both real-time and batch-processing paths. The architecture incorporate an Event Hub, a Stream Analytics Job, a Stream Analytics Job, an output to PowerBI, and a second output to a Azure ADLS Gen2.
-											<br>2. Create a Power BI dashboard that shows a world map with the current location of each racing team, as well as a table ranking the teams by their position in the race. 
+										<p>In this scenario, we took on the role of Nokia and design a cloud-based Lambda Architecture to process telemetry data from sailing boats. The architecture will include a real-time processing path for immediate analysis of incoming data and a batch processing path for handling data in larger volumes and performing more complex calculations. This design will enable Nokia to efficiently process and derive insights from sailing boat data, supporting real-time monitoring and decision-making as well as historical analysis and comprehensive reporting.</p>
+										<p>As the race is not currently taking place, a Python simulator was used to generate boat telemetry data for a fleet of 10 racing participants. This Python race simulation app was configured to send data to the Event Hub in the Azure cloud every 60 seconds.
 											
-										
-															
-																					
-														
 																			
 									<hr class="major" />
 
